@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roi Maynar | Animación y CFX</title>
+    <style>
+        /* VARIABLES Y TEMA */
+        :root {
+            --bg-color: #0f1115;
+            --text-color: #e0e0e0;
+            --accent-color: #ff6b35;
+            --card-bg: #1a1d24;
+            --nav-bg: rgba(15, 17, 21, 0.9);
+            --tex-base: url('text_trama.jpg');
+            --tex-frame: url('Portada_PowerPoint.jpg');
+            --card-base: url('Base_Sabotajes.jpg');
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f4f4f4;
+            --text-color: #222222;
+            --accent-color: #d9531e;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(244, 244, 244, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: var(--tex-base);
+            background-blend-mode: overlay;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* NAVEGACIÓN Y TEMA */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        /* SISTEMA DE VISTAS (SPA) */
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* HERO REEL FULLSCREEN */
+        .hero {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            margin-top: -80px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Permite hacer click a través del iframe */
+        }
+
+        /* Ajuste para mantener proporción de iframe (16:9) llenando la pantalla */
+        @media (min-aspect-ratio: 16/9) {
+            .hero-video { height: 300vw; }
+        }
+        @media (max-aspect-ratio: 16/9) {
+            .hero-video { width: 300vh; }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+            z-index: 10;
+            background: rgba(0,0,0,0.6);
+            padding: 20px 40px;
+            border: 4px solid var(--accent-color);
+            border-image: var(--tex-frame) 30 stretch;
+        }
+
+        .hero-overlay h1 {
+            font-size: 3rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        /* SECCIÓN ESPECIALIZACIONES (CARTAS GRANDES) */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 60px 0 40px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            padding: 0 40px 80px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            flex: 1 1 300px;
+            max-width: 450px;
+            min-height: 650px;
+            background-image: var(--card-base);
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) rotate(3deg) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            z-index: 2;
+        }
+
+        /* Círculo central multimedia de la carta */
+        .circle-media-frame {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-top: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            background: #000;
+        }
+
+        .circle-media-frame img, .circle-media-frame video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Caja blanca inferior de texto */
+        .card-text-box {
+            background-color: #fdfbf7;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            color: #111;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        .card-text-box h2 {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .card-text-box p {
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        /* =========================================================
+           NUEVO: PROYECTOS GRID ESTILO NURIA MV
+           ========================================================= */
+        .nuria-projects-section {
+            padding: 40px 5%;
+            margin-bottom: 60px;
+        }
+
+        .nuria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px; /* Minimal gap estilo profesional */
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .nuria-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: #111;
+        }
+
+        .nuria-item img, .nuria-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nuria-item:hover img, .nuria-item:hover video {
+            transform: scale(1.05); /* Sutil zoom in */
+        }
+
+        .nuria-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        .nuria-item:hover .nuria-overlay {
+            opacity: 1;
+        }
+
+        .nuria-overlay h3 {
+            font-size: 1.5rem;
+            margin: 0 0 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: translateY(10px);
+            transition: transform 0.4s ease;
+        }
+
+        .nuria-overlay p {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: translateY(10px);
+            transition: transform 0.4s ease;
+            transition-delay: 0.05s;
+        }
+
+        .nuria-item:hover .nuria-overlay h3,
+        .nuria-item:hover .nuria-overlay p {
+            transform: translateY(0);
+        }
+
+        /* SECCIÓN SOFTWARE */
+        .software-section {
+            padding: 60px 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 2px solid var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            margin-bottom: 60px;
+        }
+
+        .software-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .software-badge {
+            background: var(--card-bg);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--text-color);
+            transition: 0.3s;
+            cursor: default;
+        }
+
+        .software-badge:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        /* VISTAS INTERNAS (CATEGRORÍAS Y PROYECTOS) */
+        .internal-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            gap: 20px;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid var(--accent-color);
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .project-detail-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 40px;
+            border: 2px solid var(--accent-color);
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* FOOTER / CONTACTO */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--nav-bg);
+            border-top: 4px solid var(--accent-color);
+            border-image: var(--tex-frame) 30 stretch;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .contact-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .categories-container { padding: 0 20px 40px; }
+            .card { min-height: 500px; }
+            .nuria-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ FIJO -->
+    <nav>
+        <div class="logo" onclick="showView('view-home')">Roi Maynar</div>
+        <button class="theme-toggle" onclick="toggleTheme()">Modo Claro</button>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL SPA -->
+    <main id="app">
+
+        <!-- ==========================================
+             VISTA 1: INICIO (HOME)
+             ========================================== -->
+        <div id="view-home" class="view active">
+            
+            <!-- Hero Video de YouTube / Vimeo Fondo -->
+            <section class="hero">
+                <!-- REEMPLAZA ESTE SRC POR TU ID DE VIMEO O YOUTUBE -->
+                <iframe 
+                  src="https://player.vimeo.com/video/123456789?background=1&autoplay=1&loop=1&byline=0&title=0" 
+                  title="Reel Roi Maynar"
+                  frameborder="0" 
+                  allow="autoplay; fullscreen" 
+                  allowfullscreen
+                  class="hero-video">
+                </iframe>
+                <div class="hero-overlay">
+                    <h1>Technical & 3D Artist</h1>
+                </div>
+            </section>
+
+            <!-- Categorías: Estilo Cartas Mágicas Base_Sabotajes.jpg -->
+            <h2 class="section-title">Especializaciones Técnicas</h2>
+            <section class="categories-container">
+                
+                <!-- CARTA CFX -->
+                <div class="card" onclick="showView('view-cat-cfx')" style="background-image: url('Base_Sabotajes.jpg');">
+                    <div class="circle-media-frame">
+                        <!-- Sustituir por imagen o gif descriptivo -->
+                        <img src="cfx_thumb.jpg" alt="CFX Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=CFX+Media'">
+                    </div>
+                    <div class="card-text-box">
+                        <h2>CFX</h2>
+                        <p>Simulación de cabello, telas y dinámicas de personajes.</p>
+                    </div>
+                </div>
+
+                <!-- CARTA FX -->
+                <div class="card" onclick="showView('view-cat-fx')" style="background-image: url('Base_Sabotajes.jpg');">
+                    <div class="circle-media-frame">
+                        <img src="fx_thumb.jpg" alt="FX Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=FX+Media'">
+                    </div>
+                    <div class="card-text-box">
+                        <h2>FX</h2>
+                        <p>Efectos volumétricos, partículas y destrucción procedural.</p>
+                    </div>
+                </div>
+
+                <!-- CARTA Animación 3D -->
+                <div class="card" onclick="showView('view-cat-anim3d')" style="background-image: url('Base_Sabotajes.jpg');">
+                    <div class="circle-media-frame">
+                        <img src="anim3d_thumb.jpg" alt="Anim 3D Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Anim+3D+Media'">
+                    </div>
+                    <div class="card-text-box">
+                        <h2>Animación 3D</h2>
+                        <p>Keyframing, acting y mecánicas de movimiento.</p>
+                    </div>
+                </div>
+
+                <!-- CARTA Diseño Gráfico & Juegos -->
+                <div class="card" onclick="showView('view-cat-grafico')" style="background-image: url('Base_Sabotajes.jpg');">
+                    <div class="circle-media-frame">
+                        <img src="grafico_thumb.jpg" alt="Gráfico Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Design+Media'">
+                    </div>
+                    <div class="card-text-box">
+                        <h2>Diseño & Mesa</h2>
+                        <p>Desarrollo visual, maquetación y diseño lúdico.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ==========================================
+                 NUEVA SECCIÓN: PROYECTOS TIPO NURIA MV
+                 ========================================== -->
+            <h2 class="section-title">Proyectos Destacados</h2>
+            <section class="nuria-projects-section">
+                <div class="nuria-grid">
+                    
+                    <!-- Proyecto Destacado 1 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+1" alt="Proyecto 1">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 1</h3>
+                            <p>Simulación CFX / Cloth</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto Destacado 2 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+2" alt="Proyecto 2">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 2</h3>
+                            <p>Efectos FX / Fluidos</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto Destacado 3 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+3" alt="Proyecto 3">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 3</h3>
+                            <p>Animación 3D / Keyframe</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Proyecto Destacado 4 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+4" alt="Proyecto 4">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 4</h3>
+                            <p>Juego de Mesa / Diseño</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto Destacado 5 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+5" alt="Proyecto 5">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 5</h3>
+                            <p>Composición Nuke</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto Destacado 6 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+6" alt="Proyecto 6">
+                        <div class="nuria-overlay">
+                            <h3>Nombre del Proyecto 6</h3>
+                            <p>Pipeline & Tools</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECCIÓN HERRAMIENTAS / SOFTWARE -->
+            <section class="software-section">
+                <h2 style="margin-bottom: 30px; text-transform: uppercase; font-size: 2rem;">Herramientas & Pipeline</h2>
+                <div class="software-grid">
+                    <div class="software-badge">Houdini</div>
+                    <div class="software-badge">Blender</div>
+                    <div class="software-badge">Maya</div>
+                    <div class="software-badge">Nuke</div>
+                    <div class="software-badge">After Effects</div>
+                    <div class="software-badge">InDesign</div>
+                </div>
+            </section>
+
+            <!-- FOOTER CONTACTO -->
+            <footer id="contacto">
+                <h2>Roi Maynar</h2>
+                <p style="margin-top:10px; color:#aaa;">Technical Artist & Animador</p>
+                <div class="contact-links">
+                    <a href="mailto:roimaynar@gmail.com">roimaynar@gmail.com</a>
+                    <a href="https://www.youtube.com/@ElConceptista" target="_blank">YouTube: El Conceptista</a>
+                    <a href="https://www.instagram.com/el_conceptista" target="_blank">Instagram: @el_conceptista</a>
+                    <a href="https://www.artstation.com/roimaynar" target="_blank">ArtStation</a>
+                </div>
+            </footer>
+        </div>
+
+
+        <!-- ==========================================
+             VISTA 2: CATEGORÍA CFX (Ejemplo de cuadrícula)
+             ========================================== -->
+        <div id="view-cat-cfx" class="view">
+            <div class="internal-header">
+                <button class="btn-back" onclick="showView('view-home')">← Volver al Inicio</button>
+                <h2>Trabajos de CFX</h2>
+            </div>
+            
+            <section class="nuria-projects-section">
+                <div class="nuria-grid">
+                    <!-- Proyecto 1 -->
+                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
+                        <img src="https://via.placeholder.com/800x450/222/fff?text=Thumbnail+CFX+1" alt="Proyecto CFX">
+                        <div class="nuria-overlay">
+                            <h3>Simulación de Ropa Dinámica</h3>
+                            <p>Houdini / Maya</p>
+                        </div>
+                    </div>
+                    <!-- Añade más items aquí copiando el bloque div.nuria-item -->
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ==========================================
+             VISTA 3: DETALLE DEL PROYECTO
+             ========================================== -->
+        <div id="view-proj-cfx-1" class="view">
+            <div class="internal-header">
+                <button class="btn-back" onclick="showView('view-cat-cfx')">← Volver a CFX</button>
+                <button class="btn-back" onclick="showView('view-home')">Inicio</button>
+            </div>
+
+            <div class="project-detail-container">
+                <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Título del Proyecto CFX</h1>
+                
+                <!-- Reproductor YouTube / Vimeo del proyecto -->
+                <div class="video-container">
+                    <iframe src="https://player.vimeo.com/video/123456789" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                </div>
+
+                <div style="background: var(--card-bg); padding: 30px; border-radius: 8px;">
+                    <h3 style="margin-bottom: 15px; color: var(--accent-color);">Desglose de Responsabilidades</h3>
+                    <p>Aquí puedes redactar en detalle cuál fue tu participación en este proyecto específico.</p>
+                    <ul style="margin-top: 15px; margin-left: 20px;">
+                        <li>Configuración del setup de colisiones.</li>
+                        <li>Simulación de tejidos (Vellum / nCloth).</li>
+                        <li>Corrección de penetraciones post-caché.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JAVASCRIPT: Navegación y Dark Mode -->
+    <script>
+        // Función para cambiar de vista ocultando las demás
+        function showView(viewId) {
+            window.scrollTo(0, 0); // Sube arriba al cambiar de pantalla
+            const views = document.querySelectorAll('.view');
+            views.forEach(v => {
+                v.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        // Función Modo Claro / Oscuro
+        function toggleTheme() {
+            const body = document.body;
+            const toggleBtn = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                toggleBtn.textContent = 'Modo Claro';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                toggleBtn.textContent = 'Modo Oscuro';
+            }
+        }
+    </script>
+</body>
+</html>

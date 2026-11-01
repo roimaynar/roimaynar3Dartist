@@ -1,692 +1,216 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roi Maynar | Animación y CFX</title>
-    <style>
-        /* VARIABLES Y TEMA */
-        :root {
-            --bg-color: #0f1115;
-            --text-color: #e0e0e0;
-            --accent-color: #ff6b35;
-            --card-bg: #1a1d24;
-            --nav-bg: rgba(15, 17, 21, 0.9);
-            --tex-base: url('text_trama.jpg');
-            --tex-frame: url('Portada_PowerPoint.jpg');
-            --card-base: url('Base_Sabotajes.jpg');
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu Nombre · Portfolio CFX, FX y juegos de mesa</title>
+<meta name="description" content="Portfolio de CFX, FX, animación 3D, diseño gráfico y juegos de mesa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#051a05; --paper:#fdf2f6; --orange:#d2581f; --teal:#12ad8a; --navy:#0e0550; --ink:#050505; --red:#ff2d55;
+  --title:'Anton','Impact',sans-serif; --body:'Work Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--paper);font:400 1rem/1.6 var(--body);min-height:100vh;position:relative}
+body::before{content:"";position:fixed;inset:0;background:url(assets/back.png) center/420px;opacity:.16;z-index:-1}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--title);font-weight:400;letter-spacing:.02em;text-transform:uppercase;line-height:1}
 
-        [data-theme="light"] {
-            --bg-color: #f4f4f4;
-            --text-color: #222222;
-            --accent-color: #d9531e;
-            --card-bg: #ffffff;
-            --nav-bg: rgba(244, 244, 244, 0.9);
-        }
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(5,26,5,.92);border-bottom:4px solid var(--orange);backdrop-filter:blur(6px)}
+nav .wrap{display:flex;gap:18px;align-items:center;justify-content:space-between;padding-top:12px;padding-bottom:12px;flex-wrap:wrap}
+nav b{font:1.4rem var(--title);letter-spacing:.04em}
+nav ul{display:flex;gap:18px;list-style:none;padding:0}
+nav a{text-decoration:none;font-weight:600;text-transform:uppercase;font-size:.85rem;letter-spacing:.08em}
+nav a:hover{color:var(--teal)}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+/* hero */
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;padding:70px 0 60px}
+.kicker{display:inline-block;background:var(--orange);color:var(--paper);padding:4px 12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:.8rem;margin-bottom:18px}
+.hero h1{font-size:clamp(3.2rem,9vw,7rem);text-shadow:5px 5px 0 var(--navy),9px 9px 0 var(--teal)}
+.hero p{max-width:34em;margin:22px 0 28px;font-size:1.1rem}
+.btn{display:inline-block;background:var(--paper);color:var(--ink);padding:12px 22px;font:1.1rem var(--title);letter-spacing:.06em;text-decoration:none;text-transform:uppercase;border:3px solid var(--orange);box-shadow:5px 5px 0 var(--teal);transition:transform .15s,box-shadow .15s;margin-right:10px}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--teal)}
+.cover{width:min(100%,380px);justify-self:center;aspect-ratio:1465/2079;background:url(assets/cover.png) center/100% 100%;border-radius:14px;transform:rotate(3deg);box-shadow:0 20px 50px rgba(0,0,0,.6);transition:transform .3s}
+.cover:hover{transform:rotate(-1deg) scale(1.03)}
 
-        body {
-            background-color: var(--bg-color);
-            background-image: var(--tex-base);
-            background-blend-mode: overlay;
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-            transition: background-color 0.3s, color 0.3s;
-        }
+section{padding:60px 0}
+.sec-title{font-size:clamp(2.2rem,6vw,4rem);margin-bottom:10px;display:inline-block;background:var(--paper);color:var(--ink);padding:6px 16px;border-left:12px solid var(--orange)}
+.sec-sub{margin:10px 0 28px;max-width:40em;opacity:.85}
 
-        /* NAVEGACIÓN Y TEMA */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--nav-bg);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 2px solid var(--accent-color);
-        }
+/* wizards */
+.wiz{width:100%;aspect-ratio:874/827;background:url(assets/wizards.png) no-repeat;background-size:200% 300%}
+.w-cfx{background-position:0 0}.w-fx{background-position:100% 0}.w-3d{background-position:0 50%}.w-diseno{background-position:100% 50%}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.skill{background:var(--paper);color:var(--ink);padding:16px;text-align:center;border:4px solid var(--orange);border-radius:6px;transition:transform .2s}
+.skill:nth-child(2){border-color:var(--navy)}.skill:nth-child(3){border-color:var(--teal)}.skill:nth-child(4){border-color:var(--ink)}
+.skill:hover{transform:translateY(-6px) rotate(-1deg)}
+.skill .wiz{width:60%;margin:0 auto 6px}
+.skill h3{font-size:1.6rem}
+.skill p{font-size:.9rem;line-height:1.4;margin-top:6px}
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+.chip{background:transparent;color:var(--paper);border:3px solid var(--paper);padding:6px 16px;font:1rem var(--title);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.chip:hover{border-color:var(--teal)}
+.chip[aria-pressed=true]{background:var(--orange);border-color:var(--orange)}
 
-        .theme-toggle {
-            background: none;
-            border: 2px solid var(--text-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:30px}
+.card{aspect-ratio:1465/2079;perspective:1200px;cursor:pointer;container-type:inline-size;position:relative;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.card:focus-visible{outline:4px solid var(--teal);outline-offset:6px}
+.card.hide{display:none}
+.inner{position:absolute;inset:0;transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.card:hover .inner{transform:translateY(-8px) rotate(-1deg)}
+.card.flip .inner{transform:rotateY(180deg)}
+.card.flip:hover .inner{transform:rotateY(180deg) translateY(-8px)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background-size:100% 100%;border-radius:3%;box-shadow:0 12px 30px rgba(0,0,0,.55)}
+.front{background-image:url(assets/frame.png)}
+.back{background-image:url(assets/back.png);transform:rotateY(180deg)}
+.art{position:absolute;left:11%;top:16%;width:78%;height:54.5%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#051a05 center/cover}
+.plate{width:74%;aspect-ratio:1;border-radius:50%;background:var(--paper);display:grid;place-items:center}
+.plate .wiz{width:86%}
+.label{position:absolute;left:4%;top:78.2%;width:92%;height:19.5%;color:var(--ink);padding:2.2cqw 3cqw;display:flex;flex-direction:column;justify-content:center;gap:1cqw}
+.label h3{font-size:8.2cqw;line-height:1}
+.label span{font-weight:600;font-size:4.2cqw;text-transform:uppercase;letter-spacing:.08em}
+.label .c-cfx{color:#111}.label .c-fx{color:var(--navy)}.label .c-3d{color:var(--orange)}.label .c-diseno{color:var(--teal)}.label .c-juegos{color:var(--red)}
+.hint{position:absolute;right:5%;top:4%;width:11cqw;height:11cqw;border-radius:50%;background:var(--paper);color:var(--ink);display:grid;place-items:center;font:5cqw var(--title);opacity:.9}
+.detail{position:absolute;left:23%;right:23%;top:31%;bottom:31%;display:flex;flex-direction:column;justify-content:center;gap:2.5cqw;text-align:center;font-size:4.4cqw;line-height:1.35}
+.detail h3{font-size:7.5cqw;color:var(--orange);text-shadow:1px 1px 0 var(--navy)}
+.detail small{font-size:3.7cqw;color:#8fe0cb;letter-spacing:.06em;text-transform:uppercase}
+.detail a{align-self:center;background:var(--paper);color:var(--ink);padding:1.2cqw 4cqw;font:4.4cqw var(--title);text-decoration:none;text-transform:uppercase}
 
-        .theme-toggle:hover {
-            background: var(--text-color);
-            color: var(--bg-color);
-        }
+/* juego */
+.game{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:center}
+.game .cover{transform:rotate(-3deg)}
+.game .cover:hover{transform:rotate(1deg) scale(1.03)}
+.game h2{font-size:clamp(2.2rem,6vw,4rem);margin-bottom:16px}
+.game p{margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px}
+.tags li{list-style:none;background:var(--teal);color:var(--ink);padding:3px 12px;font-weight:600;font-size:.85rem;text-transform:uppercase}
 
-        /* SISTEMA DE VISTAS (SPA) */
-        .view {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-            padding-top: 80px;
-            min-height: 100vh;
-        }
+/* contacto */
+.contact{text-align:center}
+.contact .links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+footer{padding:30px 0 50px;text-align:center;opacity:.7;font-size:.85rem;border-top:4px solid var(--orange)}
 
-        .view.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* HERO REEL FULLSCREEN */
-        .hero {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            margin-top: -80px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
-            height: 100vh;
-            transform: translate(-50%, -50%);
-            pointer-events: none; /* Permite hacer click a través del iframe */
-        }
-
-        /* Ajuste para mantener proporción de iframe (16:9) llenando la pantalla */
-        @media (min-aspect-ratio: 16/9) {
-            .hero-video { height: 300vw; }
-        }
-        @media (max-aspect-ratio: 16/9) {
-            .hero-video { width: 300vh; }
-        }
-
-        .hero-overlay {
-            position: absolute;
-            bottom: 40px;
-            text-align: center;
-            z-index: 10;
-            background: rgba(0,0,0,0.6);
-            padding: 20px 40px;
-            border: 4px solid var(--accent-color);
-            border-image: var(--tex-frame) 30 stretch;
-        }
-
-        .hero-overlay h1 {
-            font-size: 3rem;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        /* SECCIÓN ESPECIALIZACIONES (CARTAS GRANDES) */
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin: 60px 0 40px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .categories-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: stretch;
-            gap: 30px;
-            padding: 0 40px 80px;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .card {
-            flex: 1 1 300px;
-            max-width: 450px;
-            min-height: 650px;
-            background-image: var(--card-base);
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transform-style: preserve-3d;
-        }
-
-        .card:hover {
-            transform: translateY(-15px) rotate(3deg) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            z-index: 2;
-        }
-
-        /* Círculo central multimedia de la carta */
-        .circle-media-frame {
-            width: 100%;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-top: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            background: #000;
-        }
-
-        .circle-media-frame img, .circle-media-frame video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Caja blanca inferior de texto */
-        .card-text-box {
-            background-color: #fdfbf7;
-            padding: 15px;
-            border-radius: 4px;
-            text-align: center;
-            color: #111;
-            margin-bottom: 20px;
-            border: 2px solid #333;
-        }
-
-        .card-text-box h2 {
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            color: #000;
-        }
-
-        .card-text-box p {
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.3;
-        }
-
-        /* =========================================================
-           NUEVO: PROYECTOS GRID ESTILO NURIA MV
-           ========================================================= */
-        .nuria-projects-section {
-            padding: 40px 5%;
-            margin-bottom: 60px;
-        }
-
-        .nuria-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 15px; /* Minimal gap estilo profesional */
-            width: 100%;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .nuria-item {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            cursor: pointer;
-            background-color: #111;
-        }
-
-        .nuria-item img, .nuria-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .nuria-item:hover img, .nuria-item:hover video {
-            transform: scale(1.05); /* Sutil zoom in */
-        }
-
-        .nuria-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 50%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 30px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            color: #fff;
-            pointer-events: none;
-        }
-
-        .nuria-item:hover .nuria-overlay {
-            opacity: 1;
-        }
-
-        .nuria-overlay h3 {
-            font-size: 1.5rem;
-            margin: 0 0 5px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transform: translateY(10px);
-            transition: transform 0.4s ease;
-        }
-
-        .nuria-overlay p {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: translateY(10px);
-            transition: transform 0.4s ease;
-            transition-delay: 0.05s;
-        }
-
-        .nuria-item:hover .nuria-overlay h3,
-        .nuria-item:hover .nuria-overlay p {
-            transform: translateY(0);
-        }
-
-        /* SECCIÓN SOFTWARE */
-        .software-section {
-            padding: 60px 40px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 2px solid var(--accent-color);
-            border-bottom: 2px solid var(--accent-color);
-            margin-bottom: 60px;
-        }
-
-        .software-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .software-badge {
-            background: var(--card-bg);
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid var(--text-color);
-            transition: 0.3s;
-            cursor: default;
-        }
-
-        .software-badge:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-        }
-
-        /* VISTAS INTERNAS (CATEGRORÍAS Y PROYECTOS) */
-        .internal-header {
-            display: flex;
-            align-items: center;
-            padding: 20px 40px;
-            gap: 20px;
-        }
-
-        .btn-back {
-            padding: 10px 20px;
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 2px solid var(--accent-color);
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-
-        .btn-back:hover {
-            background: var(--accent-color);
-            color: #fff;
-        }
-
-        .project-detail-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 40px;
-        }
-
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-            height: 0;
-            overflow: hidden;
-            margin-bottom: 40px;
-            border: 2px solid var(--accent-color);
-            background: #000;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* FOOTER / CONTACTO */
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            background: var(--nav-bg);
-            border-top: 4px solid var(--accent-color);
-            border-image: var(--tex-frame) 30 stretch;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-links a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        .contact-links a:hover {
-            color: var(--accent-color);
-        }
-
-        @media (max-width: 768px) {
-            .categories-container { padding: 0 20px 40px; }
-            .card { min-height: 500px; }
-            .nuria-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+@media(max-width:800px){
+  .hero,.game{grid-template-columns:1fr}
+  .cover{max-width:300px}
+  nav ul{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
 
-    <!-- MENÚ FIJO -->
-    <nav>
-        <div class="logo" onclick="showView('view-home')">Roi Maynar</div>
-        <button class="theme-toggle" onclick="toggleTheme()">Modo Claro</button>
-    </nav>
+<nav><div class="wrap">
+  <b>TU NOMBRE</b>
+  <ul>
+    <li><a href="#especialidades">Especialidades</a></li>
+    <li><a href="#trabajo">Trabajo</a></li>
+    <li><a href="#juego">Juego de mesa</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</div></nav>
 
-    <!-- CONTENEDOR PRINCIPAL SPA -->
-    <main id="app">
+<header class="wrap hero">
+  <div>
+    <span class="kicker">Industria de la animación</span>
+    <h1>CFX · FX<br>3D · Juegos</h1>
+    <p>Soy artista de CFX y FX, animadora 3D y diseñadora gráfica. También creo juegos de mesa. Aquí tienes mi mano de cartas: dale la vuelta a cada una para ver el proceso detrás.</p>
+    <a class="btn" href="#trabajo">Ver trabajo</a><a class="btn" href="#contacto">Contacto</a>
+  </div>
+  <div class="cover" role="img" aria-label="Portada del manual del juego de mesa"></div>
+</header>
 
-        <!-- ==========================================
-             VISTA 1: INICIO (HOME)
-             ========================================== -->
-        <div id="view-home" class="view active">
-            
-            <!-- Hero Video de YouTube / Vimeo Fondo -->
-            <section class="hero">
-                <!-- REEMPLAZA ESTE SRC POR TU ID DE VIMEO O YOUTUBE -->
-                <iframe 
-                  src="https://vimeo.com/1241983054" 
-                  title="Reel Roi Maynar"
-                  frameborder="0" 
-                  allow="autoplay; fullscreen" 
-                  allowfullscreen
-                  class="hero-video">
-                </iframe>
-                <div class="hero-overlay">
-                    <h1>Technical & 3D Artist</h1>
-                </div>
-            </section>
+<section id="especialidades"><div class="wrap">
+  <h2 class="sec-title">Especialidades</h2>
+  <p class="sec-sub">Cuatro magos, cuatro oficios.</p>
+  <div class="skills">
+    <div class="skill"><div class="wiz w-cfx"></div><h3>CFX</h3><p>Groom de pelo y simulación de ropa para personajes.</p></div>
+    <div class="skill"><div class="wiz w-fx"></div><h3>FX</h3><p>Fuego, agua, humo, destrucción y magia.</p></div>
+    <div class="skill"><div class="wiz w-3d"></div><h3>Animación 3D</h3><p>Personajes, actuación y puesta en escena.</p></div>
+    <div class="skill"><div class="wiz w-diseno"></div><h3>Diseño gráfico</h3><p>Ilustración, tipografía, cartas y maquetación.</p></div>
+  </div>
+</div></section>
 
-            <!-- Categorías: Estilo Cartas Mágicas Base_Sabotajes.jpg -->
-            <h2 class="section-title">Especializaciones Técnicas</h2>
-            <section class="categories-container">
-                
-                <!-- CARTA CFX -->
-                <div class="card" onclick="showView('view-cat-cfx')" style="background-image: url('Base_Sabotajes.jpg');">
-                    <div class="circle-media-frame">
-                        <!-- Sustituir por imagen o gif descriptivo -->
-                        <img src="cfx_thumb.jpg" alt="CFX Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=CFX+Media'">
-                    </div>
-                    <div class="card-text-box">
-                        <h2>CFX</h2>
-                        <p>Simulación de cabello, telas y dinámicas de personajes.</p>
-                    </div>
-                </div>
+<section id="trabajo"><div class="wrap">
+  <h2 class="sec-title">Trabajo</h2>
+  <p class="sec-sub">Toca una carta para darle la vuelta.</p>
+  <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
 
-                <!-- CARTA FX -->
-                <div class="card" onclick="showView('view-cat-fx')" style="background-image: url('Base_Sabotajes.jpg');">
-                    <div class="circle-media-frame">
-                        <img src="fx_thumb.jpg" alt="FX Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=FX+Media'">
-                    </div>
-                    <div class="card-text-box">
-                        <h2>FX</h2>
-                        <p>Efectos volumétricos, partículas y destrucción procedural.</p>
-                    </div>
-                </div>
+<section id="juego"><div class="wrap game">
+  <div class="cover" role="img" aria-label="Portada del manual"></div>
+  <div>
+    <h2>Juego de mesa</h2>
+    <!-- EDITA AQUÍ: título y descripción de tu juego -->
+    <p><strong>Título del juego.</strong> Un juego de cartas de subastas y sabotajes donde hacer trampas forma parte de las reglas. Diseñé las mecánicas, las ilustraciones, las cartas y el manual.</p>
+    <p>Del primer prototipo en papel a la maquetación final para imprenta.</p>
+    <ul class="tags"><li>2–5 jugadores</li><li>Subastas</li><li>Sabotajes</li><li>Ilustración</li><li>Maquetación</li></ul>
+    <a class="btn" href="#contacto">Hablemos</a>
+  </div>
+</div></section>
 
-                <!-- CARTA Animación 3D -->
-                <div class="card" onclick="showView('view-cat-anim3d')" style="background-image: url('Base_Sabotajes.jpg');">
-                    <div class="circle-media-frame">
-                        <img src="anim3d_thumb.jpg" alt="Anim 3D Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Anim+3D+Media'">
-                    </div>
-                    <div class="card-text-box">
-                        <h2>Animación 3D</h2>
-                        <p>Keyframing, acting y mecánicas de movimiento.</p>
-                    </div>
-                </div>
+<section id="contacto"><div class="wrap contact">
+  <h2 class="sec-title">Contacto</h2>
+  <p class="sec-sub" style="margin-inline:auto">¿Tienes un proyecto o quieres probar el juego? Escríbeme.</p>
+  <div class="links">
+    <!-- EDITA AQUÍ: tus enlaces -->
+    <a class="btn" href="mailto:tu@email.com">Email</a>
+    <a class="btn" href="https://www.linkedin.com/in/tuusuario">LinkedIn</a>
+    <a class="btn" href="https://vimeo.com/tuusuario">Demo reel</a>
+    <a class="btn" href="https://www.instagram.com/tuusuario">Instagram</a>
+  </div>
+</div></section>
 
-                <!-- CARTA Diseño Gráfico & Juegos -->
-                <div class="card" onclick="showView('view-cat-grafico')" style="background-image: url('Base_Sabotajes.jpg');">
-                    <div class="circle-media-frame">
-                        <img src="grafico_thumb.jpg" alt="Gráfico Preview" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Design+Media'">
-                    </div>
-                    <div class="card-text-box">
-                        <h2>Diseño & Mesa</h2>
-                        <p>Desarrollo visual, maquetación y diseño lúdico.</p>
-                    </div>
-                </div>
+<footer><div class="wrap">© <span id="yr"></span> Tu Nombre · Hecho a mano, como las trampas.</div></footer>
 
-            </section>
-
-            <!-- ==========================================
-                 NUEVA SECCIÓN: PROYECTOS TIPO NURIA MV
-                 ========================================== -->
-            <h2 class="section-title">Proyectos Destacados</h2>
-            <section class="nuria-projects-section">
-                <div class="nuria-grid">
-                    
-                    <!-- Proyecto Destacado 1 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+1" alt="Proyecto 1">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 1</h3>
-                            <p>Simulación CFX / Cloth</p>
-                        </div>
-                    </div>
-
-                    <!-- Proyecto Destacado 2 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+2" alt="Proyecto 2">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 2</h3>
-                            <p>Efectos FX / Fluidos</p>
-                        </div>
-                    </div>
-
-                    <!-- Proyecto Destacado 3 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+3" alt="Proyecto 3">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 3</h3>
-                            <p>Animación 3D / Keyframe</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Proyecto Destacado 4 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+4" alt="Proyecto 4">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 4</h3>
-                            <p>Juego de Mesa / Diseño</p>
-                        </div>
-                    </div>
-
-                    <!-- Proyecto Destacado 5 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/111/fff?text=Imagen+Proyecto+5" alt="Proyecto 5">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 5</h3>
-                            <p>Composición Nuke</p>
-                        </div>
-                    </div>
-
-                    <!-- Proyecto Destacado 6 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/222/fff?text=Imagen+Proyecto+6" alt="Proyecto 6">
-                        <div class="nuria-overlay">
-                            <h3>Nombre del Proyecto 6</h3>
-                            <p>Pipeline & Tools</p>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- SECCIÓN HERRAMIENTAS / SOFTWARE -->
-            <section class="software-section">
-                <h2 style="margin-bottom: 30px; text-transform: uppercase; font-size: 2rem;">Herramientas & Pipeline</h2>
-                <div class="software-grid">
-                    <div class="software-badge">Houdini</div>
-                    <div class="software-badge">Blender</div>
-                    <div class="software-badge">Maya</div>
-                    <div class="software-badge">Nuke</div>
-                    <div class="software-badge">After Effects</div>
-                    <div class="software-badge">InDesign</div>
-                </div>
-            </section>
-
-            <!-- FOOTER CONTACTO -->
-            <footer id="contacto">
-                <h2>Roi Maynar</h2>
-                <p style="margin-top:10px; color:#aaa;">Technical Artist & Animador</p>
-                <div class="contact-links">
-                    <a href="mailto:roimaynar@gmail.com">roimaynar@gmail.com</a>
-                    <a href="https://www.youtube.com/@ElConceptista" target="_blank">YouTube: El Conceptista</a>
-                    <a href="https://www.instagram.com/el_conceptista" target="_blank">Instagram: @el_conceptista</a>
-                    <a href="https://www.artstation.com/roimaynar" target="_blank">ArtStation</a>
-                </div>
-            </footer>
-        </div>
-
-
-        <!-- ==========================================
-             VISTA 2: CATEGORÍA CFX (Ejemplo de cuadrícula)
-             ========================================== -->
-        <div id="view-cat-cfx" class="view">
-            <div class="internal-header">
-                <button class="btn-back" onclick="showView('view-home')">← Volver al Inicio</button>
-                <h2>Trabajos de CFX</h2>
-            </div>
-            
-            <section class="nuria-projects-section">
-                <div class="nuria-grid">
-                    <!-- Proyecto 1 -->
-                    <div class="nuria-item" onclick="showView('view-proj-cfx-1')">
-                        <img src="https://via.placeholder.com/800x450/222/fff?text=Thumbnail+CFX+1" alt="Proyecto CFX">
-                        <div class="nuria-overlay">
-                            <h3>Simulación de Ropa Dinámica</h3>
-                            <p>Houdini / Maya</p>
-                        </div>
-                    </div>
-                    <!-- Añade más items aquí copiando el bloque div.nuria-item -->
-                </div>
-            </section>
-        </div>
-
-
-        <!-- ==========================================
-             VISTA 3: DETALLE DEL PROYECTO
-             ========================================== -->
-        <div id="view-proj-cfx-1" class="view">
-            <div class="internal-header">
-                <button class="btn-back" onclick="showView('view-cat-cfx')">← Volver a CFX</button>
-                <button class="btn-back" onclick="showView('view-home')">Inicio</button>
-            </div>
-
-            <div class="project-detail-container">
-                <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Título del Proyecto CFX</h1>
-                
-                <!-- Reproductor YouTube / Vimeo del proyecto -->
-                <div class="video-container">
-                    <iframe src="https://player.vimeo.com/video/123456789" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-                </div>
-
-                <div style="background: var(--card-bg); padding: 30px; border-radius: 8px;">
-                    <h3 style="margin-bottom: 15px; color: var(--accent-color);">Desglose de Responsabilidades</h3>
-                    <p>Aquí puedes redactar en detalle cuál fue tu participación en este proyecto específico.</p>
-                    <ul style="margin-top: 15px; margin-left: 20px;">
-                        <li>Configuración del setup de colisiones.</li>
-                        <li>Simulación de tejidos (Vellum / nCloth).</li>
-                        <li>Corrección de penetraciones post-caché.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- JAVASCRIPT: Navegación y Dark Mode -->
-    <script>
-        // Función para cambiar de vista ocultando las demás
-        function showView(viewId) {
-            window.scrollTo(0, 0); // Sube arriba al cambiar de pantalla
-            const views = document.querySelectorAll('.view');
-            views.forEach(v => {
-                v.classList.remove('active');
-            });
-            document.getElementById(viewId).classList.add('active');
-        }
-
-        // Función Modo Claro / Oscuro
-        function toggleTheme() {
-            const body = document.body;
-            const toggleBtn = document.querySelector('.theme-toggle');
-            
-            if (body.getAttribute('data-theme') === 'light') {
-                body.removeAttribute('data-theme');
-                toggleBtn.textContent = 'Modo Claro';
-            } else {
-                body.setAttribute('data-theme', 'light');
-                toggleBtn.textContent = 'Modo Oscuro';
-            }
-        }
-    </script>
+<script>
+/* EDITA AQUÍ tus proyectos.
+   c: cfx | fx | 3d | diseno | juegos
+   img: ruta a una imagen (ej. "assets/mi-proyecto.jpg"); si está vacío se muestra el mago de la categoría.
+   link: enlace al vídeo o a la página del proyecto (opcional). */
+const CATS={cfx:"CFX",fx:"FX","3d":"Animación 3D",diseno:"Diseño gráfico",juegos:"Juegos de mesa"};
+const P=[
+ {t:"Groom de criatura",c:"cfx",y:2025,d:"Pelo largo con guías, clumping y viento. Pipeline de grooming a render.",tools:"Houdini · Karma",img:"",link:""},
+ {t:"Capa en movimiento",c:"cfx",y:2025,d:"Simulación de ropa con arrugas y colisiones para plano de acción.",tools:"Houdini Vellum",img:"",link:""},
+ {t:"Hechizo de fuego",c:"fx",y:2024,d:"Fuego estilizado con control artístico y render por capas.",tools:"Houdini · Solaris",img:"",link:""},
+ {t:"Tormenta de agua",c:"fx",y:2024,d:"Océano, espuma y salpicaduras integradas en el plano.",tools:"Houdini FLIP",img:"",link:""},
+ {t:"Ciclo de caminar",c:"3d",y:2024,d:"Animación de personaje con peso e intención.",tools:"Maya · Blender",img:"",link:""},
+ {t:"Identidad visual",c:"diseno",y:2025,d:"Cartelería, tipografía y sistema gráfico para un proyecto.",tools:"Photoshop · Illustrator",img:"",link:""},
+ {t:"Cartas de sabotaje",c:"juegos",y:2026,d:"Diseño de cartas, iconografía y equilibrio de mecánicas.",tools:"Ilustración · Diseño",img:"assets/frame.png",link:""},
+ {t:"Manual del juego",c:"juegos",y:2026,d:"Maquetación del manual y portada para impresión.",tools:"InDesign · Photoshop",img:"assets/cover.png",link:""}
+];
+const grid=document.getElementById('grid'),fl=document.getElementById('filters');
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+grid.innerHTML=P.map(p=>{
+  const art=p.img?`<div class="art" style="background-image:url('${esc(p.img)}')"></div>`
+    :`<div class="art"><div class="plate"><div class="wiz w-${p.c==='juegos'?'cfx':p.c}"></div></div></div>`;
+  return `<button class="card" data-c="${p.c}" aria-label="${esc(p.t)}: girar carta">
+    <div class="inner">
+      <div class="face front">${art}<div class="hint">↻</div>
+        <div class="label"><h3>${esc(p.t)}</h3><span class="c-${p.c}">${CATS[p.c]} · ${p.y}</span></div></div>
+      <div class="face back"><div class="detail"><h3>${esc(p.t)}</h3><p>${esc(p.d)}</p><small>${esc(p.tools)}</small>
+        ${p.link?`<a href="${esc(p.link)}" target="_blank" rel="noopener">Ver</a>`:''}</div></div>
+    </div></button>`;
+}).join('');
+grid.addEventListener('click',e=>{if(e.target.closest('a'))return;const c=e.target.closest('.card');if(c)c.classList.toggle('flip')});
+const used=['todo',...new Set(P.map(p=>p.c))];
+fl.innerHTML=used.map(k=>`<button class="chip" data-k="${k}" aria-pressed="${k==='todo'}">${k==='todo'?'Todo':CATS[k]}</button>`).join('');
+fl.addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;
+  fl.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  grid.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide',b.dataset.k!=='todo'&&c.dataset.c!==b.dataset.k));
+});
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
 </body>
 </html>
